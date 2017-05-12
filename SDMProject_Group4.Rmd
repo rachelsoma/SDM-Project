@@ -44,6 +44,10 @@ Group Project
 Explain the assignment.
 
 
+
+This project uses Git for versioning
+
+
 Part One
 --------------------------------------------------------
 
@@ -52,9 +56,61 @@ Load and clean the data is the csv file
 
 ```{r}
 #load the data from csv
-foxData = read.csv("FlyingFoxMonitoring.csv")
-attach(foxData)
+foxData = read.csv("FlyingFoxMonitoring.csv",header = TRUE)
 
+
+#converting factor to integer
+blkFox <- suppressWarnings(c(as.numeric(as.character(foxData$BlackFlyingFox.Count))))
+redFox<- suppressWarnings(c(as.numeric(as.character(foxData$LittleRedFlyingFox.Count))))
+greyFox<- suppressWarnings(c(as.numeric(as.character(foxData$GreyHeadedFlyingFox.Count))))
+totalFox <- suppressWarnings(c(as.numeric(as.character(foxData$TotalSpecies.Count))))
+
+sum(is.na(blkFox))
+sum(is.na(redFox))
+sum(is.na(greyFox))
+
+#removing data with NA
+#find the rows which have missing data
+idNAblk=which(is.na(blkFox))
+idNAred=which(is.na(blkFox))
+idNAgrey=which(is.na(blkFox))
+idNAtotal=which(is.na(totalFox))
+
+blkFox=blkFox[-idNAblk]
+blkFox=blkFox[-idNAred]
+blkFox=blkFox[-idNAgrey]
+blkFox=blkFox[-idNAtotal]
+redFox=redFox[-idNAblk]
+redFox=redFox[-idNAred]
+redFox=redFox[-idNAgrey]
+redFox=redFox[-idNAtotal]
+greyFox=greyFox[-idNAblk]
+greyFox=greyFox[-idNAred]
+greyFox=greyFox[-idNAgrey]
+greyFox=greyFox[-idNAtotal]
+totalFox=totalFox[-idNAblk]
+totalFox=totalFox[-idNAred]
+totalFox=totalFox[-idNAgrey]
+totalFox=totalFox[-idNAtotal]
+
+l=length(totalFox)
+
+#calculate totals based on each species
+myTotal = blkFox+redFox+greyFox
+#myTotal
+
+#
+i=1
+for (i in length(myTotal)){
+  if (myTotal[i] != totalFox[i]){
+    print(i)
+  }
+  else
+  {
+    
+  }
+  i=i+1
+}
 
 ```
 
