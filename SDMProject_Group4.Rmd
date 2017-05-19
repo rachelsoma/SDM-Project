@@ -58,60 +58,39 @@ Load and clean the data is the csv file
 #load the data from csv
 foxData = read.csv("FlyingFoxMonitoring.csv",header = TRUE)
 
-
 #converting factor to integer
 blkFox <- suppressWarnings(c(as.numeric(as.character(foxData$BlackFlyingFox.Count))))
 redFox<- suppressWarnings(c(as.numeric(as.character(foxData$LittleRedFlyingFox.Count))))
 greyFox<- suppressWarnings(c(as.numeric(as.character(foxData$GreyHeadedFlyingFox.Count))))
 totalFox <- suppressWarnings(c(as.numeric(as.character(foxData$TotalSpecies.Count))))
 
-sum(is.na(blkFox))
-sum(is.na(redFox))
-sum(is.na(greyFox))
+##removing data with NA
 
-#removing data with NA
-#find the rows which have missing data
-idNAblk=which(is.na(blkFox))
-idNAred=which(is.na(blkFox))
-idNAgrey=which(is.na(blkFox))
-idNAtotal=which(is.na(totalFox))
-
-blkFox=blkFox[-idNAblk]
-blkFox=blkFox[-idNAred]
-blkFox=blkFox[-idNAgrey]
-blkFox=blkFox[-idNAtotal]
-redFox=redFox[-idNAblk]
-redFox=redFox[-idNAred]
-redFox=redFox[-idNAgrey]
-redFox=redFox[-idNAtotal]
-greyFox=greyFox[-idNAblk]
-greyFox=greyFox[-idNAred]
-greyFox=greyFox[-idNAgrey]
-greyFox=greyFox[-idNAtotal]
-totalFox=totalFox[-idNAblk]
-totalFox=totalFox[-idNAred]
-totalFox=totalFox[-idNAgrey]
-totalFox=totalFox[-idNAtotal]
-
-l=length(totalFox)
+#make a vector of the rows which have missing data
+idNA=c(which(is.na(blkFox)),which(is.na(redFox)),which(is.na(greyFox)),which(is.na(totalFox)))
+paste(length(idNA),"cases have NAs")
+#remove those rows
+blkFox=blkFox[-idNA]
+redFox=redFox[-idNA]
+greyFox=greyFox[-idNA]
+totalFox=totalFox[-idNA]
 
 #calculate totals based on each species
 myTotal = blkFox+redFox+greyFox
-#myTotal
+diffTotals = totalFox-myTotal
 
-#
-i=1
-for (i in length(myTotal)){
-  if (myTotal[i] != totalFox[i]){
-    print(i)
-  }
-  else
-  {
+#make a vector where if the difference between the actual total and the sum of each species doesn't match the value is NA and if it does it's "good"
+idBadMath=ifelse(diffTotals!=0,NA,"good")
+paste(sum(is.na(idBadMath)),"rows have totals that dont match the sum of each species")
+#making a vecor of the NAs (which are actually the rows with bad maths)
+idBadMath=which(is.na(idBadMath))
+
+#removing the rows that have bad maths
+blkFox=blkFox[-idBadMath]
+redFox=redFox[-idBadMath]
+greyFox=greyFox[-idBadMath]
+totalFox=totalFox[-idBadMath]
     
-  }
-  i=i+1
-}
-
 ```
 
 Interpret the solution of the problem.
